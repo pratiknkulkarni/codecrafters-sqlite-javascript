@@ -12,12 +12,17 @@ if (command === ".dbinfo") {
     buffer: Buffer.alloc(100),
   });
 
-  // You can use print statements as follows for debugging, they'll be visible when running tests.
-  console.error("Logs from your program will appear here!");
+  let offset = 0;
 
-  // TODO: Uncomment the code below to pass the first stage
-  // const pageSize = buffer.readUInt16BE(16); // page size is 2 bytes starting at offset 16
-  // console.log(`database page size: ${pageSize}`);
+  const headerString = Buffer.from(buffer.subarray(0, offset + 16).toString());
+  // console.log(headerString.toString()); // SQLITE FORMAT 3
+  offset += 16
+
+  const databaseSize = buffer.subarray(offset, offset + 2);
+  offset += 2
+
+  console.log("database page size: ", databaseSize.readUInt16BE())
+
 } else {
   throw `Unknown command ${command}`;
 }
